@@ -2,7 +2,7 @@
 
 ## 🧱 System Architecture
 
-  Prompt → Streamlit App → Prompt Handler → Tools (training, deploy, logs) → Output
+    Prompt → Streamlit App → Prompt Handler → Tools (training, deploy, logs) → Output
 
 ## ⚙️ Code Structure
 
