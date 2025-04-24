@@ -2,7 +2,7 @@
 
 ## 🎯 Vision
 
-Enable machine learning teams to build, deploy, monitor, and manage ML workflows using natural language prompts — reducing friction, improving velocity, and democratizing access to ML infrastructure.
+Enable the machine learning teams to build, deploy, monitor, and manage ML workflows using natural language prompts — reducing friction, improving velocity, and democratizing access to ML infrastructure.
 
 ## 🧠 Core Idea
 
