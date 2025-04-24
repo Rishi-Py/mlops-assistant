@@ -19,6 +19,11 @@ from tools import (
     feature_selection_func,
     trigger_deployment_pipeline_func,
     provision_gpu_func,
+    recommend_infra_func,
+    provision_infra_func,
+    scale_infra_func,
+    decommission_infra_func,
+    show_infra_log_func,
     shared_state
 )
 
@@ -82,6 +87,36 @@ tools = [
         ),
         description="Log an experiment to the experiment tracker."
     ),
+
+    Tool(
+        name="Recommend Infrastructure",
+        func=recommend_infra_func,
+        description="Suggest the right compute environment (Databricks, AML, Kubernetes) based on dataset size and model requirements."
+    ),
+    
+    Tool(
+        name="Provision Infrastructure",
+        func=provision_infra_func,
+        description="Provision the requested environment (e.g., 'Databricks cluster' or 'Azure ML compute')."
+    ),
+    
+    Tool(
+        name="Scale Infrastructure",
+        func=scale_infra_func,
+        description="Scale the last provisioned environment to the specified number of replicas."
+    ),
+    
+    Tool(
+        name="Decommission Infrastructure",
+        func=decommission_infra_func,
+        description="Tear down the currently provisioned compute environment."
+    ),
+    Tool(
+        name="Show Infra Log",
+        func=show_infra_log_func,
+        description="Show a history of all infrastructure actions taken."
+    ),
+
 ]
 
 # Initialize agent

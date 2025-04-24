@@ -394,3 +394,56 @@ def provision_gpu_func(*args, **kwargs) -> str:
 
 
 
+import datetime, random
+from tools import shared_state  # assuming shared_state already holds df, predictors, target
+
+# --- Tool: Recommend infra based on data size & model type ---
+def recommend_infra_func(*args, **kwargs) -> str:
+    df = shared_state.get("df")
+    target = shared_state.get("target")
+    predictors = shared_state.get("predictors", [])
+    if df is None or target is None:
+        return "❌ No dataset or target selected. Upload data first."
+    n_rows, n_feats = df.shape[0], len(predictors)
+    # Simple rules
+    if n_rows > 200_000 or n_feats > 50:
+        choice = "Databricks cluster"
+    elif "GPU" in kwargs.get("requires", "") or df[target].dtype == "float64":
+        choice = "Azure ML GPU compute"
+    else:
+        choice = "Kubernetes CPU node pool"
+    return (f"✅ Based on {n_rows} rows and {n_feats} features, I recommend: **{choice}** "
+            f"(estimated cost: ${random.randint(50,200)}/day)")
+
+# --- Tool: Provision infra (simulate) ---
+infra_log = []
+def provision_infra_func(environment: str, *args, **kwargs) -> str:
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    infra_log.append({"time": now, "env": environment, "action": "provisioned"})
+    return f"✅ {environment} provisioned at {now}"
+
+# --- Tool: Scale infra ---
+def scale_infra_func(replicas: int = 1, *args, **kwargs) -> str:
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    infra_log.append({"time": now, "env": "last", "action": f"scaled to {replicas} replicas"})
+    return f"✅ Scaled infrastructure to {replicas} replicas at {now}"
+
+# --- Tool: Decommission infra ---
+def decommission_infra_func(*args, **kwargs) -> str:
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    infra_log.append({"time": now, "env": "last", "action": "decommissioned"})
+    return f"✅ Infrastructure decommissioned at {now}"
+
+# --- Tool: Show infra log ---
+def show_infra_log_func(*args, **kwargs) -> str:
+    if not infra_log:
+        return "ℹ️ No infra actions recorded yet."
+    # Format as markdown
+    lines = ["| Time | Environment | Action |", "|-----|-------------|--------|"]
+    for e in infra_log:
+        lines.append(f"| {e['time']} | {e['env']} | {e['action']} |")
+    return "\n".join(lines)
+
+# Register (if using in assistant.py) or import these in assistant_agent.py
+
+
